@@ -11,33 +11,37 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.serverSideAuthenticated = void 0;
 const nookies_1 = require("nookies");
+/**
+ * Wrapper function for authenticated server-side rendering in Next.js.
+ *
+ * @param fn - The original `getServerSideProps` function.
+ * @param config - Configuration options for handling authentication and redirection.
+ *
+ * @returns A new `getServerSideProps` function with authentication and error handling.
+ */
 function serverSideAuthenticated(fn, { cookieName, requestFailed, tokenFailed }) {
     return (ctx) => __awaiter(this, void 0, void 0, function* () {
-        var _a, _b;
+        var _a, _b, _c, _d;
         const cookies = (0, nookies_1.parseCookies)(ctx);
         const token = cookies[cookieName];
-        // if (!token) {
-        //   return {
-        //     redirect: {
-        //       destination: tokenFailed?.destinationUrl ?? '/',
-        //       permanent: tokenFailed?.isPermanent ?? false,
-        //       statusCode: tokenFailed?.statusCode,
-        //     },
-        //   };
-        // }
-        console.log(token, 'token');
-        console.log(fn, 'fn');
+        if (!token) {
+            return {
+                redirect: {
+                    destination: (_a = tokenFailed === null || tokenFailed === void 0 ? void 0 : tokenFailed.destinationUrl) !== null && _a !== void 0 ? _a : '/',
+                    permanent: (_b = tokenFailed === null || tokenFailed === void 0 ? void 0 : tokenFailed.isPermanent) !== null && _b !== void 0 ? _b : false,
+                    statusCode: tokenFailed === null || tokenFailed === void 0 ? void 0 : tokenFailed.statusCode,
+                },
+            };
+        }
         try {
-            console.log('Caiu no await');
             return yield fn(ctx);
         }
         catch (error) {
-            console.log(error, 'error catch in lib');
             (0, nookies_1.destroyCookie)(ctx, cookieName);
             return {
                 redirect: {
-                    destination: (_a = requestFailed === null || requestFailed === void 0 ? void 0 : requestFailed.destinationUrl) !== null && _a !== void 0 ? _a : '/',
-                    permanent: (_b = requestFailed === null || requestFailed === void 0 ? void 0 : requestFailed.isPermanent) !== null && _b !== void 0 ? _b : false,
+                    destination: (_c = requestFailed === null || requestFailed === void 0 ? void 0 : requestFailed.destinationUrl) !== null && _c !== void 0 ? _c : '/',
+                    permanent: (_d = requestFailed === null || requestFailed === void 0 ? void 0 : requestFailed.isPermanent) !== null && _d !== void 0 ? _d : false,
                     statusCode: requestFailed === null || requestFailed === void 0 ? void 0 : requestFailed.statusCode,
                 },
             };
