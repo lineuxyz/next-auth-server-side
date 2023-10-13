@@ -1,6 +1,6 @@
 {
   "name": "@lineuxyz/next-auth-server-side",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A library designed to facilitate server-side rendered authentication with Next.js. It helps developers handle authentication tokens, catch request errors, and manage redirections seamlessly",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
